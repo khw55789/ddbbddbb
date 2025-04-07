@@ -1,3 +1,4 @@
+A G, [2025-04-07 오후 4:14]
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -20,7 +21,7 @@
 
   <script>
     const sheetID = "1GDkvsziPjlWkeqy71yMPr4rGxzLTVcvOwTR2iEXIXJ4";
-    const sheetName = "디비";
+    const sheetName = "시트1";
     const url = https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${sheetName};
 
     fetch(url)
@@ -38,6 +39,75 @@
             const phone = row.c[2]?.v?.replace(/[^0-9]/g, "");
             const note = row.c[3]?.v || "";
             const realname = row.c[13]?.v || "";
+
+            if (!phone || phone.length < 8) return;
+
+            const li = document.createElement("li");
+            li.innerHTML = `
+              <a href="tel:${phone}">
+                ${index}. 📅 ${date} 
+                ${realname ? 👤 ${realname} : ""}
+                📞 ${phone}
+                ${note ? 📝 ${note} : ""}
+              </a>
+            `;
+            list.appendChild(li);
+          });
+
+        } catch (e) {
+          document.getElementById("error").textContent = "❌ 데이터 파싱 중 오류 발생: " + e.message;
+        }
+      })
+      .catch(err => {
+        document.getElementById("list").innerHTML = "❌ 데이터를 불러오지 못했습니다.";
+        document.getElementById("error").textContent = "Fetch 오류: " + err.message;
+        console.error("Google Sheet 불러오기 실패:", err);
+      });
+  </script>
+</body>
+</html>
+
+A G, [2025-04-07 오후 4:36]
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>사랑과 평화 TM</title>
+  <style>
+    body { font-family: sans-serif; padding: 30px; background: #f7f7f7; }
+    h1 { color: #2d6cdf; }
+    ul { list-style: none; padding: 0; }
+    li { background: white; margin: 10px 0; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    a { font-size: 18px; color: #000; text-decoration: none; display: block; }
+    a:hover { color: #2d6cdf; }
+    #error { margin-top: 20px; color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>📞 사랑과 평화 TM 리스트</h1>
+  <ul id="list">불러오는 중입니다...</ul>
+  <div id="error"></div>
+
+  <script>
+    const sheetID = "1GDkvsziPjlWkeqy71yMPr4rGxzLTVcvOwTR2iEXIXJ4"; // 시트 ID
+    const sheetName = "시트1"; // 탭 이름
+    const url = https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${sheetName};
+
+    fetch(url)
+      .then(res => res.text())
+      .then(data => {
+        try {
+          const json = JSON.parse(data.substr(47).slice(0, -2));
+          const rows = json.table.rows;
+          const list = document.getElementById("list");
+          list.innerHTML = "";
+
+          rows.forEach(row => {
+            const index = row.c[0]?.v || "";      // A열: 번호
+            const date = row.c[1]?.v || "";       // B열: 날짜
+            const phone = row.c[2]?.v?.replace(/[^0-9]/g, "");  // C열: 전화번호
+            const note = row.c[3]?.v || "";       // D열: 문자내용
+            const realname = row.c[13]?.v || "";  // N열: 이름
 
             if (!phone || phone.length < 8) return;
 
