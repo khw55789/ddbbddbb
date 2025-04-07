@@ -58,7 +58,6 @@
       .catch(err => {
         document.getElementById("list").innerHTML = "❌ 데이터를 불러오지 못했습니다.";
         document.getElementById("error").textContent = "Fetch 오류: " + err.message;
-        console.error("Google Sheet 불러오기 실패:", err);
       });
   </script>
 </body>
