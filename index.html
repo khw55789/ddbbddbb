@@ -4,18 +4,27 @@
   <meta charset="UTF-8">
   <title>사랑과 평화 TM</title>
   <style>
-    body { font-family: sans-serif; padding: 30px; background: #f7f7f7; }
+    body { font-family: sans-serif; padding: 30px; background: #fff; }
     h1 { color: #2d6cdf; }
     ul { list-style: none; padding: 0; }
-    li { background: white; margin: 10px 0; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    a { font-size: 18px; color: #000; text-decoration: none; display: block; }
-    a:hover { color: #2d6cdf; }
-    #error { margin-top: 20px; color: red; font-weight: bold; }
+    li { margin: 10px 0; }
+    a {
+      display: block;
+      padding: 15px 20px;
+      background: #2d6cdf;
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 18px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    a:hover { background: #1a4fb0; }
+    #error { color: red; margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h1>📞 사랑과 평화 TM 리스트</h1>
-  <ul id="list">불러오는 중입니다...</ul>
+  <h1>📞 전화 걸기 리스트</h1>
+  <ul id="list">불러오는 중...</ul>
   <div id="error"></div>
 
   <script>
@@ -43,21 +52,19 @@
             const li = document.createElement("li");
             li.innerHTML = `
               <a href="tel:${phone}">
-                ${index}. 📅 ${date}
-                📞 ${phone}
-                ${note ? 📝 ${note} : ""}
+                ${index ? "#" + index + " " : ""}📅 ${date}<br/>
+                📞 ${phone}<br/>
+                ${note ? "📝 " + note : ""}
               </a>
             `;
             list.appendChild(li);
           });
-
         } catch (e) {
-          document.getElementById("error").textContent = "❌ 데이터 파싱 중 오류 발생: " + e.message;
+          document.getElementById("error").textContent = "❌ 데이터 파싱 오류: " + e.message;
         }
       })
       .catch(err => {
-        document.getElementById("list").innerHTML = "❌ 데이터를 불러오지 못했습니다.";
-        document.getElementById("error").textContent = "Fetch 오류: " + err.message;
+        document.getElementById("error").textContent = "❌ 통신 오류: " + err.message;
       });
   </script>
 </body>
