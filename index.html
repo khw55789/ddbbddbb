@@ -37,7 +37,7 @@
             const date = row.c[1]?.v || "";       // B열: 날짜
             const phone = row.c[2]?.v?.replace(/[^0-9]/g, "");  // C열: 전화번호
             const note = row.c[3]?.v || "";       // D열: 문자내용
-            const realname = row.c[13]?.v || "";  // N열: 이름
+          
 
             if (!phone || phone.length < 8) return;
 
