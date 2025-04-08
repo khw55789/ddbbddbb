@@ -21,7 +21,7 @@
   <script>
     const sheetID = "1GDkvsziPjlWkeqy71yMPr4rGxzLTVcvOwTR2iEXIXJ4";
     const sheetName = "시트1";
-    const url = https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${sheetName};
+    const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${sheetName}`;
 
     fetch(url)
       .then(res => res.text())
@@ -32,19 +32,23 @@
           const list = document.getElementById("list");
           list.innerHTML = "";
 
-          rows.forEach(row => {
-            const index = row.c[0]?.v || "";
-            const date = row.c[1]?.v || "";
+          rows.forEach((row, idx) => {
+            if (idx === 0) return; // 제목행 스킵
+
+            const index = row.c[0]?.v  "";
+            const date = row.c[1]?.v  "";
             const phone = row.c[2]?.v?.replace(/[^0-9]/g, "");
-            const note = row.c[3]?.v?.toString().replace(/[\n\r]/g, " ").replace(/"/g, "'") || "";
+            const message = row.c[3]?.v  "";
+            const note = row.c[4]?.v  "";
 
             if (!phone || phone.length < 8) return;
 
             const li = document.createElement("li");
             li.innerHTML = `
               <a href="tel:${phone}">
-                ${index}. 📅 ${date}  
-                📞 ${phone}
+                ${index}. 📅 ${date}<br/>
+                📞 ${phone}<br/>
+                ${message ? 💬 ${message}<br/> : ""}
                 ${note ? 📝 ${note} : ""}
               </a>
             `;
@@ -52,13 +56,12 @@
           });
 
         } catch (e) {
-          document.getElementById("error").textContent = "❌ 데이터 파싱 중 오류 발생: " + e.message;
+          document.getElementById("error").textContent = "❌ 데이터 파싱 오류: " + e.message;
         }
       })
       .catch(err => {
         document.getElementById("list").innerHTML = "❌ 데이터를 불러오지 못했습니다.";
         document.getElementById("error").textContent = "Fetch 오류: " + err.message;
-        console.error("Google Sheet 불러오기 실패:", err);
       });
   </script>
 </body>
